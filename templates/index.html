@@ -17,6 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="{{ url_for('static', filename='img/logo_estudio_grande.webp') }}">
 <link rel="preload" href="{{ url_for('static', filename='img/logo_estudio_grande.webp') }}" as="image" fetchpriority="high">
+<link rel="preload" as="image" href="{{ url_for('static', filename='img/inline-image-2.webp') }}">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow+Condensed:wght@400;600&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/infinitum-tattoo.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/performance.css') }}">
@@ -328,12 +329,77 @@
     </div>
   </div>
   <div class="styles-grid reveal">
-    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#141210;"><img src="{{ url_for('static', filename='img/inline-image-2.webp') }}" loading="lazy" decoding="async" alt="Blackwork"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 01</div><div class="style-name">Blackwork</div><div class="style-desc">Trazos puros en negro absoluto. Geometría, ornamentación y contraste que hablan sin palabras.</div></div></div>
-    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#161210;"><img src="{{ url_for('static', filename='img/inline-image-3.webp') }}" loading="lazy" decoding="async" alt="Realismo"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 02</div><div class="style-name">Realismo</div><div class="style-desc">Retratos, naturaleza, objetos — con una precisión que desafía los límites de lo posible en la piel.</div></div></div>
-    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#131211;"><img src="{{ url_for('static', filename='img/inline-image-4.webp') }}" loading="lazy" decoding="async" alt="Tradicional"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 03</div><div class="style-name">Tradicional</div><div class="style-desc">Old school con líneas gruesas y colores sólidos. Una estética atemporal que nunca pasa de moda.</div></div></div>
-    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#111009;"><img src="{{ url_for('static', filename='img/inline-image-5.webp') }}" loading="lazy" decoding="async" alt="Fine Line"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 04</div><div class="style-name">Fine Line</div><div class="style-desc">Delicadeza extrema. Líneas finísimas que crean composiciones íntimas y sofisticadas.</div></div></div>
-    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#141010;"><img src="{{ url_for('static', filename='img/inline-image-6.webp') }}" loading="lazy" decoding="async" alt="Neo Tradicional"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 05</div><div class="style-name">Neo Tradicional</div><div class="style-desc">Lo clásico reinterpretado con color vibrante, composición libre y narrativa visual contemporánea.</div></div></div>
-    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#0f0e0d;"><img src="{{ url_for('static', filename='img/inline-image-7.webp') }}" loading="lazy" decoding="async" alt="Geométrico"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 06</div><div class="style-name">Geométrico</div><div class="style-desc">Patrones, simetría y precisión matemática. El orden como forma de belleza y significado.</div></div></div>
+
+    <div class="style-card tilt-card">
+      <div class="style-card-bg">
+        <div class="card-art" style="background:#141210;">
+          <img src="{{ url_for('static', filename='img/inline-image-2.webp') }}" loading="lazy" decoding="async" alt="Realismo dark - Odin">
+        </div>
+      </div>
+      <div class="style-card-overlay"></div>
+      <div class="style-card-content">
+        <div class="style-tag">Realismo Dark</div>
+        <div class="style-name">Odin</div>
+        <div class="style-desc">Retrato oscuro inspirado en la mitología nórdica. Mirada intensa, contraste fuerte y presencia dominante.</div>
+      </div>
+    </div>
+
+    <div class="style-card tilt-card">
+      <div class="style-card-bg">
+        <div class="card-art" style="background:#161210;">
+          <img src="{{ url_for('static', filename='img/inline-image-3.webp') }}" loading="lazy" decoding="async" alt="Realismo ilustrativo - Proceso creativo">
+        </div>
+      </div>
+      <div class="style-card-overlay"></div>
+      <div class="style-card-content">
+        <div class="style-tag">Realismo Ilustrativo</div>
+        <div class="style-name">Proceso Creativo</div>
+        <div class="style-desc">La conexión entre la mano del artista y sus herramientas. Concepto, técnica y ejecución en una sola pieza.</div>
+      </div>
+    </div>
+
+    <div class="style-card tilt-card">
+      <div class="style-card-bg">
+        <div class="card-art" style="background:#131211;">
+          <img src="{{ url_for('static', filename='img/inline-image-4.webp') }}" loading="lazy" decoding="async" alt="Fine line - Flor minimalista">
+        </div>
+      </div>
+      <div class="style-card-overlay"></div>
+      <div class="style-card-content">
+        <div class="style-tag">Fine Line</div>
+        <div class="style-name">Flor Minimalista</div>
+        <div class="style-desc">Diseño delicado y limpio. Líneas finas que transmiten elegancia, simpleza y equilibrio.</div>
+      </div>
+    </div>
+
+    <div class="style-card tilt-card">
+      <div class="style-card-bg">
+        <div class="card-art" style="background:#111009;">
+          <img src="{{ url_for('static', filename='img/inline-image-5.webp') }}" loading="lazy" decoding="async" alt="Realismo narrativo - Camino del guerrero">
+        </div>
+      </div>
+      <div class="style-card-overlay"></div>
+      <div class="style-card-content">
+        <div class="style-tag">Realismo Narrativo</div>
+        <div class="style-name">Camino del Guerrero</div>
+        <div class="style-desc">Manga completa con narrativa visual. Profundidad, movimiento y composición cinematográfica.</div>
+      </div>
+    </div>
+
+    <div class="style-card tilt-card">
+      <div class="style-card-bg">
+        <div class="card-art" style="background:#141010;">
+          <img src="{{ url_for('static', filename='img/inline-image-6.webp') }}" loading="lazy" decoding="async" alt="Blackwork ilustrativo - Dualidad">
+        </div>
+      </div>
+      <div class="style-card-overlay"></div>
+      <div class="style-card-content">
+        <div class="style-tag">Blackwork Ilustrativo</div>
+        <div class="style-name">Dualidad</div>
+        <div class="style-desc">Diseño gráfico con contraste fuerte. Estética moderna con carga simbólica y composición limpia.</div>
+      </div>
+    </div>
+
   </div>
 </section>
 
