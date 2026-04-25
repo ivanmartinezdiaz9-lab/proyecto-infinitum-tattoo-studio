@@ -144,6 +144,8 @@ nav.scrolled {
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--white);
+  margin-right: auto;
+  margin-left: 0;
 }
 .nav-logo span { color: var(--neon-pink); }
 
@@ -563,7 +565,7 @@ nav.scrolled {
   aspect-ratio: 3/4;
   background: var(--gray-dark);
   overflow: hidden;
-  cursor: none;
+  cursor: pointer;
   /* Promueve a capa propia para el hover scale */
   will-change: transform;
   transform: translateZ(0);
