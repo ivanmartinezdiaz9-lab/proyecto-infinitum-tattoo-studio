@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Estudio de tatuajes en Montevideo...">
+<meta name="description" content="Infinitum Tattoo Studio en Montevideo. Tatuajes personalizados, realismo, blackwork y más.">
+<meta property="og:title" content="Infinitum Tattoo Studio">
+<meta property="og:description" content="Arte que vive en tu piel">
+<meta property="og:image" content="/static/img/logo_estudio_grande.png">
+<title>Infinitum Tattoo Studio</title>
+<link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon_16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon_32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/static/img/favicon_64.png">
+<link rel="shortcut icon" href="/static/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="{{ url_for('static', filename='img/logo_estudio_grande.webp') }}">
+<link rel="preload" href="{{ url_for('static', filename='img/logo_estudio_grande.webp') }}" as="image" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow+Condensed:wght@400;600&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/infinitum-tattoo.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/performance.css') }}">
+<style>
+  /* ── CURSOR PERSONALIZADO ── */
+  body { cursor: none; }
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--neon-pink);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease;
+    mix-blend-mode: difference;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 38px; height: 38px;
+    border: 1px solid rgba(255,45,120,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: width 0.35s ease, height 0.35s ease, border-color 0.3s;
+  }
+
+  /* ── LOGO EN NAV ── */
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .nav-logo-img {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+    transition: filter 0.3s;
+  }
+  .nav-logo-img:hover {
+    filter: brightness(1.15) drop-shadow(0 0 10px rgba(255,45,120,0.5));
+  }
+
+  /* ── HERO LOGO GRANDE ── */
+  .hero-logo-wrap {
+    position: absolute;
+    right: 4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(260px, 36vw, 500px);
+    opacity: 0;
+    animation: heroLogoIn 1.2s 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+    pointer-events: none;
+    user-select: none;
+  }
+  .hero-logo-wrap img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 40px rgba(192,57,43,0.25)) drop-shadow(0 0 100px rgba(255,45,120,0.1));
+  }
+  @keyframes heroLogoIn {
+    from { opacity: 0; transform: translateY(-50%) scale(0.92); filter: blur(10px); }
+    to   { opacity: 1; transform: translateY(-50%) scale(1);    filter: blur(0); }
+  }
+
+  /* ── PARTICLES CANVAS ── */
+  #particles-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV SCROLL ── */
+  nav { transition: background 0.4s ease, padding 0.4s ease; }
+  nav.scrolled {
+    background: rgba(13,11,10,0.97) !important;
+    backdrop-filter: blur(14px);
+    padding-top: 0.7rem !important;
+    padding-bottom: 0.7rem !important;
+    border-bottom: 1px solid rgba(255,45,120,0.1);
+  }
+
+  /* ── GLITCH ── */
+  .hero-title { position: relative; }
+  .hero-title.glitch::before,
+  .hero-title.glitch::after {
+    content: attr(data-text);
+    position: absolute; inset: 0;
+    font-family: inherit; font-size: inherit;
+    font-weight: inherit; line-height: inherit;
+    letter-spacing: inherit; pointer-events: none;
+  }
+  .hero-title.glitch::before {
+    color: #ff2d78;
+    animation: glitch1 0.3s linear;
+    clip-path: polygon(0 15%, 100% 15%, 100% 40%, 0 40%);
+  }
+  .hero-title.glitch::after {
+    color: #c0392b;
+    animation: glitch2 0.3s linear;
+    clip-path: polygon(0 58%, 100% 58%, 100% 75%, 0 75%);
+  }
+  @keyframes glitch1 {
+    0%,100%{transform:translateX(0);opacity:0}
+    30%,70%{transform:translateX(-5px);opacity:1}
+    50%{transform:translateX(5px);opacity:1}
+  }
+  @keyframes glitch2 {
+    0%,100%{transform:translateX(0);opacity:0}
+    30%,70%{transform:translateX(5px);opacity:1}
+    50%{transform:translateX(-5px);opacity:1}
+  }
+
+  /* ── SCROLL PROGRESS ── */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: linear-gradient(to right, var(--red), var(--neon-pink));
+    z-index: 99999; width: 0%;
+    box-shadow: 0 0 10px rgba(255,45,120,0.7);
+    transition: width 0.08s linear;
+  }
+
+  /* ── TILT CARDS ── */
+  .style-card { transform-style: preserve-3d; }
+
+  /* ── TIMELINE DOT ANIMADO ── */
+  .timeline-dot-inner {
+    transform: scale(0);
+    transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .timeline-item.visible .timeline-dot-inner { transform: scale(1); }
+
+  /* ── LOADING SCREEN ── */
+  #loader {
+    position: fixed; inset: 0;
+    background: #0d0b0a;
+    z-index: 999999;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2rem;
+    transition: opacity 0.7s ease, visibility 0.7s ease;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-logo {
+    width: 240px; height: auto;
+    animation: loaderPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes loaderPulse {
+    0%,100%{opacity:0.4;filter:drop-shadow(0 0 8px rgba(192,57,43,0.2))}
+    50%{opacity:1;filter:drop-shadow(0 0 35px rgba(192,57,43,0.55))}
+  }
+  .loader-bar-wrap {
+    width: 180px; height: 1px;
+    background: rgba(255,255,255,0.07); overflow: hidden;
+  }
+  .loader-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--red), var(--neon-pink));
+    animation: loaderSlide 1.7s ease forwards;
+  }
+  @keyframes loaderSlide { from{width:0%} to{width:100%} }
+
+  /* ── FOOTER LOGO ── */
+  .footer-logo { display: flex; align-items: center; }
+  .footer-logo img { height: 26px; width: auto; }
+
+  @media (max-width: 900px) {
+    .hero-logo-wrap { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">
+    <img src="{{ url_for('static', filename='img/logo_estudio_grande.webp') }}" alt="Infinitum Tattoo Studio" class="nav-logo-img" decoding="async">
+  </div>
+  <ul class="nav-links">
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#estilos">Estilos</a></li>
+    <li><a href="#equipo">Equipo</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="#proximamente">Proximamente</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+
+  <!-- LOGO GRANDE EN HERO (derecha) -->
+  <div class="hero-logo-wrap">
+    <img src="{{ url_for('static', filename='img/logo_estudio_grande.webp') }}" alt="Infinitum Tattoo Studio" decoding="async">
+  </div>
+
+  <div class="hero-eyebrow">Estudio de Tatuajes · Desde 2017</div>
+
+  <h1 class="hero-title" data-text="El arte que vive en tu piel.">
+    El arte<br>que vive<br>en tu <em>piel.</em>
+  </h1>
+
+  <p class="hero-subtitle">
+    Casi una década creando obras únicas. Cada trazo cuenta una historia, cada diseño es un compromiso con la excelencia y la identidad.
+  </p>
+
+  <div class="hero-cta">
+    <a href="#contacto" class="btn-primary magnetic">Reservar cita</a>
+    <a href="#historia" class="btn-secondary magnetic">Nuestra historia</a>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Descubrí más</span>
+  </div>
+
+  <div class="hero-year">Est. 2017 — Montevideo</div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-icon">∞ Infinitum Tattoo Studio</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="historia">
+  <div class="about-grid">
+    <div>
+      <div class="section-label reveal">Quiénes somos</div>
+      <h2 class="about-title reveal">Una pasión<br>convertida en <em>arte</em></h2>
+      <p class="about-text reveal">
+        Infinitum Tattoo Studio nació de una convicción simple: el tatuaje es una de las formas de arte más antiguas y personales que existen. Desde nuestra apertura, nos dedicamos a elevar esa tradición con técnica impecable, creatividad sin límites y un profundo respeto por la piel como lienzo.
+      </p>
+      <p class="about-text reveal">
+        Somos un espacio donde cada cliente es escuchado. No hacemos tatuajes en serie — cada pieza es una colaboración entre el artista y la persona, diseñada para durar toda la vida con la misma intensidad del primer día.
+      </p>
+      <div class="stat-row reveal">
+        <div class="stat-item">
+          <div class="stat-number" data-target="9" data-suffix="+">0+</div>
+          <div class="stat-label">Años de trayectoria</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="3000" data-suffix="+">0+</div>
+          <div class="stat-label">Obras realizadas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="5">0</div>
+          <div class="stat-label">Estilos dominados</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-visual reveal">
+      <div class="about-box">
+        <div class="about-box-inner">
+          <img src="{{ url_for('static', filename='img/inline-image-1.webp') }}" loading="lazy" decoding="async" alt="Mathias Moreno - Infinitum Tattoo Studio" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">
+        </div>
+      </div>
+      <div class="about-box-accent"></div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY TIMELINE -->
+<section class="history-section">
+  <div class="section-label reveal" style="justify-content:center;margin-bottom:1rem;">Trayectoria</div>
+  <h2 class="history-title reveal">El camino de <em>Infinitum</em></h2>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-content"><div class="timeline-year">2017</div><div class="timeline-heading">Los orígenes</div><p class="timeline-text">todo comenzo el 17 de abril del 2017 ahi fue cuando termine el curso que me inicio en el mundo del tatuaje. Empecé tatuando amigos en su casa con una maquina espantosa, totalmente descalibrada y en las ultimas.</p></div>
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-empty"></div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-empty"></div>
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-content"><div class="timeline-year">2018</div><div class="timeline-heading">Primer estudio</div><p class="timeline-text">En 2018 termine de reformar y armar lo que sería mi primer estudio de tatuajes. En el cual aprendí muchísimas cosas y fue una etapa excelente. Fue un estudio en el cual no solo evolucione yo como artista, sino que el estudio fue cambiando y creciendo conmigo.</p></div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-content"><div class="timeline-year">2022</div><div class="timeline-heading">Expansión del estudio</div><p class="timeline-text">Nos mudamos de ese estudio a principios del 2022, estudio del cual me tuve que ir por motivos personales al actual estudio donde estoy hasta el dia de hoy. Empezamos de nuevo en un lugar nuevo, en el cual no me conocia nadie, pero mis clientes me siguieron y les estoy totalmente agradecidos por ello.</p></div>
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-empty"></div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-empty"></div>
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-content"><div class="timeline-year">2023</div><div class="timeline-heading">Empezar de 0</div><p class="timeline-text">Empezar de cero, en un nuevo lugar, fue dificil. Pero gracias a mis clientes, mi pareja, y mi pasión por el arte, pudimos recuperar el norte y seguir adelante.</p></div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-empty"></div>
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-content"><div class="timeline-year">Hoy</div><div class="timeline-heading">El presente y el futuro</div><p class="timeline-text">Seguimos creciendo, sin perder la esencia. Cada día un nuevo diseño, cada cliente una nueva historia. Infinitum no tiene límites — literalmente.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ESTILOS -->
+<section class="styles-section" id="estilos">
+  <div class="styles-header">
+    <div>
+      <div class="section-label reveal">Nuestro trabajo</div>
+      <h2 class="styles-title reveal">Nuestra <em>Galería</em><br>de trabajos</h2>
+    </div>
+  </div>
+  <div class="styles-grid reveal">
+    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#141210;"><img src="{{ url_for('static', filename='img/inline-image-2.webp') }}" loading="lazy" decoding="async" alt="Blackwork"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 01</div><div class="style-name">Blackwork</div><div class="style-desc">Trazos puros en negro absoluto. Geometría, ornamentación y contraste que hablan sin palabras.</div></div></div>
+    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#161210;"><img src="{{ url_for('static', filename='img/inline-image-3.webp') }}" loading="lazy" decoding="async" alt="Realismo"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 02</div><div class="style-name">Realismo</div><div class="style-desc">Retratos, naturaleza, objetos — con una precisión que desafía los límites de lo posible en la piel.</div></div></div>
+    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#131211;"><img src="{{ url_for('static', filename='img/inline-image-4.webp') }}" loading="lazy" decoding="async" alt="Tradicional"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 03</div><div class="style-name">Tradicional</div><div class="style-desc">Old school con líneas gruesas y colores sólidos. Una estética atemporal que nunca pasa de moda.</div></div></div>
+    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#111009;"><img src="{{ url_for('static', filename='img/inline-image-5.webp') }}" loading="lazy" decoding="async" alt="Fine Line"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 04</div><div class="style-name">Fine Line</div><div class="style-desc">Delicadeza extrema. Líneas finísimas que crean composiciones íntimas y sofisticadas.</div></div></div>
+    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#141010;"><img src="{{ url_for('static', filename='img/inline-image-6.webp') }}" loading="lazy" decoding="async" alt="Neo Tradicional"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 05</div><div class="style-name">Neo Tradicional</div><div class="style-desc">Lo clásico reinterpretado con color vibrante, composición libre y narrativa visual contemporánea.</div></div></div>
+    <div class="style-card tilt-card"><div class="style-card-bg"><div class="card-art" style="background:#0f0e0d;"><img src="{{ url_for('static', filename='img/inline-image-7.webp') }}" loading="lazy" decoding="async" alt="Geométrico"></div></div><div class="style-card-overlay"></div><div class="style-card-content"><div class="style-tag">Estilo 06</div><div class="style-name">Geométrico</div><div class="style-desc">Patrones, simetría y precisión matemática. El orden como forma de belleza y significado.</div></div></div>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<section class="team-section" id="equipo">
+  <div class="section-label reveal">Las personas detrás del arte</div>
+  <h2 class="team-title reveal">Nuestro <em>equipo</em></h2>
+  <p class="team-subtitle reveal">Un artista con historia, técnica, visión propia y lleno de pasión.</p>
+  <div class="team-grid">
+    <div class="team-card reveal"><div class="team-avatar">M.M</div><div class="team-name">Mathias Moreno</div><div class="team-role">Artista Dinamico</div><p class="team-bio">Mathias, creador y embajador de Infinitum. Gran apasionado por el arte y el diseño, trabaja dia a dia con su delicadeza para brindar el mejor espacio, la mejor calidad, ambiente y su atencion personalizada a cada cliente que pasa por Infinitum.</p></div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contact-section" id="contacto">
+  <div class="contact-inner">
+    <div class="contact-eyebrow reveal">Empezá tu historia</div>
+    <h2 class="contact-title reveal">Tu próximo<br><em>tatuaje</em><br>te espera</h2>
+    <p class="contact-text reveal">Coordiná tu consulta gratuita. Contanos tu idea, tu historia, lo que querés llevar en la piel — y juntos creamos algo que te acompañe toda la vida.</p>
+    <div class="reveal"><a href="https://wa.me/59896588562" target="_blank" rel="noopener noreferrer" class="btn-primary magnetic">Reservar una cita</a></div>
+    <div class="contact-info reveal">
+      <div><div class="contact-item-label">Instagram</div><div class="contact-item-value"><a href="https://www.instagram.com/infinitumtattoostudio?igsh=b3dkcHQ2MG5qeG14" target="_blank" rel="noopener noreferrer">@infinitumtattoostudio</a></div></div>
+      <div><div class="contact-item-label">Ubicación</div><div class="contact-item-value"><a href="https://maps.app.goo.gl/aJnTAbw4YCaoQDFx6?g_st=ic
+Ubicación" target="_blank" rel="noopener noreferrer">Toledo chico, Montevideo</a></div></div>
+      <div><div class="contact-item-label">Horario</div><div class="contact-item-value">Lun–Sáb, 08–20 hs</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRÓXIMAMENTE -->
+<section id="proximamente" class="coming-section">
+
+  <!-- Líneas de escaneo -->
+  <div class="scan-lines"></div>
+
+  <!-- Contenido central -->
+  <div class="coming-inner reveal">
+
+    <div class="coming-lock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="11" width="18" height="11" rx="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+
+    <div class="coming-eyebrow">Acceso restringido</div>
+
+    <h2 class="coming-title" data-text="INFINITUM<br>MERCH">
+      INFINITUM<br><em>MERCH</em>
+    </h2>
+
+    <p class="coming-text">
+      Algo está tomando forma en la oscuridad.<br>
+      Arte que nació en la piel, ahora en tu mundo.
+    </p>
+
+    <div class="coming-tags">
+      <span>// DROP_001</span>
+      <span>// EDICIÓN LIMITADA</span>
+      <span>// PRÓXIMAMENTE</span>
+    </div>
+
+    <!-- Barra de "progreso" falsa -->
+    <div class="coming-progress-wrap">
+      <div class="coming-progress-label">Cargando colección<span class="blink-dots">...</span></div>
+      <div class="coming-progress-bar">
+        <div class="coming-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- CTA lista de espera -->
+    <div class="coming-cta">
+      <p class="coming-cta-text">Sé el primero en saber cuándo llega.</p>
+      <a href="https://wa.me/59896588562?text=Quiero%20estar%20en%20la%20lista%20de%20espera%20del%20merch%20Infinitum"
+        target="_blank" rel="noopener noreferrer"
+        class="btn-coming magnetic">
+        Unirme a la lista de espera
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Decoraciones de esquina -->
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+</section>
+
+<style>
+/* ── SECCIÓN PRÓXIMAMENTE ── */
+.coming-section {
+  position: relative;
+  min-height: 100vh;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 6rem 2rem;
+}
+
+/* Canvas de ruido */
+#noise-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+/* Líneas de escaneo tipo CRT */
+.scan-lines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.18) 2px,
+    rgba(0,0,0,0.18) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Viñeta */
+.coming-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.85) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Esquinas estilo blueprint */
+.corner {
+  position: absolute;
+  width: 32px; height: 32px;
+  border-color: rgba(255,45,120,0.4);
+  border-style: solid;
+  z-index: 3;
+}
+.corner-tl { top: 2rem; left: 2rem;  border-width: 1px 0 0 1px; }
+.corner-tr { top: 2rem; right: 2rem; border-width: 1px 1px 0 0; }
+.corner-bl { bottom: 2rem; left: 2rem;  border-width: 0 0 1px 1px; }
+.corner-br { bottom: 2rem; right: 2rem; border-width: 0 1px 1px 0; }
+
+/* Inner */
+.coming-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 680px;
+}
+
+/* Ícono candado */
+.coming-lock {
+  width: 48px; height: 48px;
+  margin: 0 auto 1.5rem;
+  color: rgba(255,45,120,0.7);
+  animation: lockPulse 3s ease-in-out infinite;
+}
+@keyframes lockPulse {
+  0%,100% { opacity: 0.5; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.08); }
+}
+
+/* Eyebrow */
+.coming-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255,45,120,0.7);
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+}
+
+/* Título */
+.coming-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(3.5rem, 12vw, 7rem);
+  font-weight: 700;
+  line-height: 0.92;
+  color: var(--cream, #f5f0eb);
+  letter-spacing: -0.02em;
+  margin-bottom: 1.8rem;
+  position: relative;
+}
+.coming-title em {
+  font-style: normal;
+  color: var(--neon-pink, #ff2d78);
+  display: block;
+  /* glitch propio */
+  animation: titleFlicker 8s infinite;
+}
+@keyframes titleFlicker {
+  0%,94%,96%,100% { opacity: 1; text-shadow: none; }
+  95% {
+    opacity: 0.6;
+    text-shadow: 3px 0 0 rgba(255,45,120,0.8), -3px 0 0 rgba(0,200,255,0.5);
+    transform: skewX(-1deg);
+  }
+}
+
+/* Texto */
+.coming-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 1rem;
+  color: rgba(245,240,235,0.55);
+  line-height: 1.75;
+  margin-bottom: 2rem;
+}
+
+/* Tags código */
+.coming-tags {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+.coming-tags span {
+  font-family: 'Barlow Condensed', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: rgba(255,45,120,0.5);
+  border: 1px solid rgba(255,45,120,0.15);
+  padding: 0.3rem 0.75rem;
+  border-radius: 2px;
+}
+
+/* Barra de progreso falsa */
+.coming-progress-wrap {
+  margin-bottom: 2.8rem;
+}
+.coming-progress-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: rgba(245,240,235,0.3);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.blink-dots {
+  animation: blink 1.2s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.coming-progress-bar {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.coming-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(255,45,120,0.4), rgba(255,45,120,0.9));
+  border-radius: 1px;
+  animation: loadingBar 6s cubic-bezier(0.4,0,0.2,1) infinite;
+  box-shadow: 0 0 8px rgba(255,45,120,0.6);
+}
+@keyframes loadingBar {
+  0%   { width: 0%; }
+  40%  { width: 67%; }
+  60%  { width: 67%; }
+  80%  { width: 89%; }
+  92%  { width: 89%; }
+  98%  { width: 100%; }
+  100% { width: 100%; opacity: 0; }
+}
+
+/* CTA */
+.coming-cta-text {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(245,240,235,0.4);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+.btn-coming {
+  display: inline-block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--neon-pink, #ff2d78);
+  border: 1px solid rgba(255,45,120,0.35);
+  padding: 0.9rem 2.2rem;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s, border-color 0.3s;
+}
+.btn-coming::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,45,120,0.08);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+.btn-coming:hover { color: #fff; border-color: rgba(255,45,120,0.7); }
+.btn-coming:hover::before { transform: scaleX(1); }
+</style>
+
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="{{ url_for('static', filename='img/logo_estudio_grande.webp') }}" alt="Infinitum Tattoo Studio" style="height:28px;width:auto;" decoding="async">
+  </div>
+  <div class="footer-copy">© 2017 Infinitum Tattoo Studio — Montevideo, Uruguay</div>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/infinitumtattoostudio?igsh=b3dkcHQ2MG5qeG14
+Instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://wa.me/59896588562" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    <a href="https://vm.tiktok.com/ZS9NkBeJ5F66c-ex7tb/" target="_blank" rel="noopener noreferrer">TikTok</a>
+    <a href="https://maps.app.goo.gl/aJnTAbw4YCaoQDFx6?g_st=ic
+Ubicación" target="_blank" rel="noopener noreferrer">Ubicación</a>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/infinitum-animations.js') }}" defer></script>
+
+<!-- ══════════════════════════════════════════
+    SPOTIFY PLAYER FLOTANTE
+══════════════════════════════════════════ -->
+<div id="spotify-player" class="sp-player sp-collapsed">
+
+  <!-- Botón toggle (siempre visible) -->
+  <button id="sp-toggle" class="sp-toggle" aria-label="Abrir reproductor">
+    <svg class="sp-icon-music" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/>
+    </svg>
+    <svg class="sp-icon-close" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+    </svg>
+    <span class="sp-label">Escuchanos</span>
+  </button>
+
+  <!-- Panel expandido -->
+  <div class="sp-panel">
+    <div class="sp-header">
+      <span class="sp-header-text">// nuestra playlist</span>
+      <div class="sp-eq">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="sp-embed-wrap">
+      <iframe
+        id="sp-iframe"
+        loading="lazy"
+        data-src="https://open.spotify.com/embed/playlist/69rgwSzZ7w2GZPkXPh72AZ?utm_source=generator&theme=0" src="about:blank"
+        width="100%"
+        height="352"
+        frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        allowtransparency="true">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ── SPOTIFY PLAYER FLOTANTE ── */
+.sp-player {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 0.6rem;
+  pointer-events: none; /* el wrapper no bloquea clicks */
+}
+
+/* Panel */
+.sp-panel {
+  width: 320px;
+  background: rgba(10, 8, 8, 0.97);
+  border: 1px solid rgba(255,45,120,0.18);
+  border-radius: 3px;
+  overflow: hidden;
+  pointer-events: all;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.03);
+  /* animación de entrada */
+  transform-origin: bottom left;
+  transform: scale(0.9) translateY(12px);
+  opacity: 0;
+  transition:
+    transform 0.38s cubic-bezier(0.23,1,0.32,1),
+    opacity   0.38s cubic-bezier(0.23,1,0.32,1);
+  pointer-events: none;
+}
+
+.sp-player:not(.sp-collapsed) .sp-panel {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Header del panel */
+.sp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid rgba(255,45,120,0.1);
+}
+.sp-header-text {
+  font-family: 'Barlow Condensed', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,45,120,0.6);
+}
+
+/* Ecualizador animado */
+.sp-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+.sp-eq span {
+  display: block;
+  width: 2px;
+  background: rgba(255,45,120,0.7);
+  border-radius: 1px;
+  animation: eqBounce 0.9s ease-in-out infinite alternate;
+}
+.sp-eq span:nth-child(1) { height: 6px;  animation-delay: 0s; }
+.sp-eq span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+.sp-eq span:nth-child(3) { height: 8px;  animation-delay: 0.3s; }
+.sp-eq span:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+
+@keyframes eqBounce {
+  from { transform: scaleY(0.3); }
+  to   { transform: scaleY(1); }
+}
+
+/* Embed */
+.sp-embed-wrap {
+  line-height: 0;
+}
+.sp-embed-wrap iframe {
+  display: block;
+  border: none;
+}
+
+/* Botón toggle */
+.sp-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: all;
+  background: rgba(10,8,8,0.97);
+  border: 1px solid rgba(255,45,120,0.3);
+  color: rgba(245,240,235,0.85);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.55rem 1rem 0.55rem 0.75rem;
+  border-radius: 2px;
+  cursor: none;
+  transition: border-color 0.3s, color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+}
+.sp-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,45,120,0.07);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.sp-toggle:hover {
+  border-color: rgba(255,45,120,0.65);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 18px rgba(255,45,120,0.15);
+}
+.sp-toggle:hover::before { transform: scaleX(1); }
+
+.sp-toggle svg {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  color: rgba(255,45,120,0.8);
+  position: relative;
+  z-index: 1;
+}
+.sp-label { position: relative; z-index: 1; }
+
+/* Íconos: música visible por defecto, X oculta */
+.sp-icon-music  { display: block; }
+.sp-icon-close  { display: none; }
+
+.sp-player:not(.sp-collapsed) .sp-icon-music { display: none; }
+.sp-player:not(.sp-collapsed) .sp-icon-close { display: block; }
+
+/* Punto de grabación pulsante en el botón cuando está abierto */
+.sp-player:not(.sp-collapsed) .sp-toggle {
+  border-color: rgba(255,45,120,0.5);
+}
+
+/* Responsive: en mobile se achica un poco */
+@media (max-width: 480px) {
+  .sp-panel { width: calc(100vw - 3rem); }
+  .sp-player { left: 1rem; bottom: 1rem; }
+}
+</style>
+
+<script>
+(function() {
+  const player = document.getElementById('spotify-player');
+  const toggle = document.getElementById('sp-toggle');
+  const iframe = document.getElementById('sp-iframe');
+  if (!player || !toggle) return;
+  toggle.addEventListener('click', () => {
+    player.classList.toggle('sp-collapsed');
+    if (iframe && iframe.dataset.src && iframe.src === 'about:blank') iframe.src = iframe.dataset.src;
+  }, { passive: true });
+})();
+</script>
+
+</body>
+</html>
