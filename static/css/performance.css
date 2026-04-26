@@ -1,2 +1,12 @@
 /* Performance mode: conserva la versión original, pero apaga efectos costosos para Lighthouse/mobile. */
 #loader,#cursor,#cursor-ring,#particles-canvas,#noise-canvas{display:none!important}body{cursor:auto!important}a,button,.btn-primary,.btn-secondary,.sp-toggle{cursor:pointer!important}.hero-logo-wrap img,.nav-logo-img:hover{filter:none!important}nav.scrolled{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}body::before{display:none!important}.section,.styles-section,.team-section,.contact-section,.coming-section,footer{content-visibility:auto;contain-intrinsic-size:1px 900px}@media(max-width:900px),(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.hero-title.glitch::before,.hero-title.glitch::after,.scan-lines,.sp-eq{display:none!important}}
+
+/* Timeline premium performance remains transform-only; no extra overrides needed. */
+
+
+/* Integrated artistic direction performance guard */
+@media(max-width:900px),(prefers-reduced-motion:reduce){
+  body::after{display:none!important}
+  .team-card{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .timeline::after{box-shadow:none!important;will-change:auto!important}
+}

@@ -17,3 +17,22 @@ if(matchMedia('(hover:hover) and (pointer:fine) and (min-width:901px)').matches)
  document.querySelectorAll('.tilt-card').forEach(card=>{let pending=false,rect=null;card.addEventListener('mouseenter',()=>{rect=card.getBoundingClientRect();},{passive:true});card.addEventListener('mousemove',e=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;if(!rect)return;const x=(e.clientX-rect.left)/rect.width-.5;const y=(e.clientY-rect.top)/rect.height-.5;card.style.transform=`perspective(700px) rotateY(${x*10}deg) rotateX(${-y*10}deg) scale(1.02)`;});},{passive:true});card.addEventListener('mouseleave',()=>{rect=null;card.style.transform='perspective(700px) rotateY(0) rotateX(0) scale(1)';},{passive:true});});
  document.querySelectorAll('.magnetic').forEach(btn=>{let pending=false,rect=null;btn.addEventListener('mouseenter',()=>{rect=btn.getBoundingClientRect();},{passive:true});btn.addEventListener('mousemove',e=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;if(!rect)return;const x=(e.clientX-rect.left-rect.width/2)*.22;const y=(e.clientY-rect.top-rect.height/2)*.22;btn.style.transform=`translate(${x}px,${y}px)`;});},{passive:true});btn.addEventListener('mouseleave',()=>{rect=null;btn.style.transform='translate(0,0)';},{passive:true});});
 }
+
+
+
+/* Integrated artistic direction — performance safe */
+const brandTimeline = document.querySelector('.timeline');
+function updateBrandTimeline() {
+  if (!brandTimeline) return;
+  const rect = brandTimeline.getBoundingClientRect();
+  const vh = window.innerHeight || document.documentElement.clientHeight;
+  const total = Math.max(1, rect.height + vh * 0.6);
+  const passed = vh * 0.72 - rect.top;
+  const progress = Math.min(Math.max(passed / total, 0), 1);
+  brandTimeline.style.setProperty('--timeline-progress', progress.toFixed(3));
+}
+if (brandTimeline) {
+  window.addEventListener('scroll', () => rafScheduler(updateBrandTimeline), { passive: true });
+  window.addEventListener('resize', () => rafScheduler(updateBrandTimeline), { passive: true });
+  updateBrandTimeline();
+}
