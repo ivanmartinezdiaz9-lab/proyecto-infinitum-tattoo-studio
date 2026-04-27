@@ -494,14 +494,12 @@ Ubicación" target="_blank" rel="noopener noreferrer">Toledo chico, Montevideo</
       </div>
     </div>
 
-    <!-- CTA lista de espera -->
+    <!-- CTA acceso restringido -->
     <div class="coming-cta">
-      <p class="coming-cta-text">Sé el primero en saber cuándo llega.</p>
-      <a href="https://wa.me/59896588562?text=Quiero%20estar%20en%20la%20lista%20de%20espera%20del%20merch%20Infinitum"
-        target="_blank" rel="noopener noreferrer"
-        class="btn-coming magnetic">
-        Unirme a la lista de espera
-      </a>
+      <p class="coming-cta-text">Acceso anticipado solo para la primera ola.</p>
+      <button type="button" id="open-access-protocol" class="btn-coming magnetic">
+        Solicitar acceso
+      </button>
     </div>
 
   </div>
@@ -513,6 +511,56 @@ Ubicación" target="_blank" rel="noopener noreferrer">Toledo chico, Montevideo</
   <div class="corner corner-br"></div>
 
 </section>
+
+<!-- ACCESS PROTOCOL MODAL — INFINITUM MERCH -->
+<div id="access-modal" class="access-modal" aria-hidden="true">
+  <div class="access-backdrop" data-close-access></div>
+  <div class="access-panel" role="dialog" aria-modal="true" aria-labelledby="access-title">
+    <button type="button" class="access-close" data-close-access aria-label="Cerrar protocolo">×</button>
+
+    <div class="access-kicker">ACCESS PROTOCOL // DROP_001</div>
+    <h3 id="access-title" class="access-title">INFINITUM MERCH<br><em>LIMITED ACCESS</em></h3>
+    <p class="access-copy">Mantené presionado para desbloquear la solicitud. La selección no garantiza compra: solo acceso anticipado al primer drop.</p>
+
+    <div class="hold-unlock" id="hold-unlock" role="button" tabindex="0" aria-label="Mantener presionado para desbloquear">
+      <div class="hold-fill"></div>
+      <span class="hold-label">MANTENER PARA DESBLOQUEAR</span>
+    </div>
+
+    <form id="access-form" class="access-form" hidden>
+      <label>
+        <span>Email *</span>
+        <input type="email" name="email" placeholder="tu@email.com" required autocomplete="email">
+      </label>
+      <label>
+        <span>Instagram</span>
+        <input type="text" name="instagram" placeholder="@usuario" autocomplete="off">
+      </label>
+      <label>
+        <span>Alias</span>
+        <input type="text" name="alias" placeholder="cómo querés aparecer" autocomplete="nickname">
+      </label>
+      <button type="submit" class="access-submit">REQUEST ACCESS</button>
+      <p class="access-note">Usamos tus datos solo para avisarte del lanzamiento de Infinitum Merch.</p>
+    </form>
+
+    <div id="access-success" class="access-success" hidden>
+      <div class="success-code">REQUEST RECEIVED</div>
+      <p>Estás en cola para DROP_001.</p>
+      <div class="queue-card">
+        <span>QUEUE POSITION</span>
+        <strong id="queue-position">—</strong>
+      </div>
+      <div class="queue-card">
+        <span>ACCESS WAVE</span>
+        <strong id="access-wave">PENDING</strong>
+      </div>
+      <a class="priority-link" href="https://wa.me/59896588562?text=Hola%20Infinitum%2C%20me%20anot%C3%A9%20en%20la%20waitlist%20del%20DROP_001%20y%20quiero%20acceso%20prioritario" target="_blank" rel="noopener noreferrer">Unlock priority por WhatsApp</a>
+    </div>
+
+    <p id="access-error" class="access-error" hidden></p>
+  </div>
+</div>
 
 <style>
 /* ── SECCIÓN PRÓXIMAMENTE ── */
@@ -737,6 +785,43 @@ Ubicación" target="_blank" rel="noopener noreferrer">Toledo chico, Montevideo</
 }
 .btn-coming:hover { color: #fff; border-color: rgba(255,45,120,0.7); }
 .btn-coming:hover::before { transform: scaleX(1); }
+
+/* ACCESS PROTOCOL MODAL */
+.access-modal { position: fixed; inset: 0; z-index: 9500; display: none; align-items: center; justify-content: center; padding: 1.25rem; }
+.access-modal.is-open { display: flex; }
+.access-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.84); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.access-panel { position: relative; width: min(100%, 560px); max-height: 92vh; overflow: auto; background: linear-gradient(145deg, rgba(16,13,12,0.98), rgba(3,3,3,0.98)); border: 1px solid rgba(255,45,120,0.28); box-shadow: 0 30px 120px rgba(0,0,0,0.78), 0 0 70px rgba(255,45,120,0.12); padding: clamp(1.6rem, 4vw, 2.8rem); color: var(--white, #f5f0eb); animation: accessIn .38s cubic-bezier(.22,1,.36,1); }
+.access-panel::before { content: ''; position: absolute; inset: 10px; border: 1px solid rgba(255,255,255,0.045); pointer-events: none; }
+@keyframes accessIn { from { opacity: 0; transform: translateY(18px) scale(.97); filter: blur(6px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+.access-close { position: absolute; top: 1rem; right: 1rem; width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.02); color: rgba(245,240,235,0.72); font-size: 1.5rem; line-height: 1; cursor: pointer; }
+.access-kicker, .access-form span, .queue-card span, .access-note { font-family: 'Barlow Condensed', sans-serif; letter-spacing: .24em; text-transform: uppercase; }
+.access-kicker { color: rgba(255,45,120,.72); font-size: .72rem; margin-bottom: 1.1rem; }
+.access-title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 7vw, 4rem); line-height: .95; margin-bottom: 1.2rem; }
+.access-title em { color: var(--neon-pink, #ff2d78); font-style: italic; text-shadow: 0 0 34px rgba(255,45,120,.24); }
+.access-copy { color: rgba(245,240,235,.58); line-height: 1.75; margin-bottom: 1.7rem; }
+.hold-unlock { position: relative; height: 54px; border: 1px solid rgba(255,45,120,.36); display: flex; align-items: center; justify-content: center; overflow: hidden; user-select: none; cursor: pointer; margin-bottom: 1.4rem; background: rgba(255,45,120,.035); }
+.hold-fill { position: absolute; inset: 0 auto 0 0; width: var(--hold-progress, 0%); background: linear-gradient(90deg, rgba(255,45,120,.16), rgba(255,45,120,.48)); transition: width .08s linear; }
+.hold-label { position: relative; z-index: 1; font-family: 'Barlow Condensed', sans-serif; font-size: .78rem; font-weight: 600; letter-spacing: .24em; color: rgba(245,240,235,.78); }
+.hold-unlock.unlocked { border-color: rgba(255,45,120,.8); box-shadow: 0 0 24px rgba(255,45,120,.14); }
+.access-form { display: grid; gap: .9rem; }
+.access-form label { display: grid; gap: .4rem; text-align: left; }
+.access-form span { color: rgba(255,45,120,.72); font-size: .62rem; }
+.access-form input { width: 100%; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.11); color: #fff; padding: .95rem 1rem; font-family: 'Barlow', sans-serif; outline: none; }
+.access-form input:focus { border-color: rgba(255,45,120,.72); box-shadow: 0 0 0 3px rgba(255,45,120,.08); }
+.access-submit, .priority-link { margin-top: .4rem; border: 0; background: var(--neon-pink, #ff2d78); color: #080606; padding: 1rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; cursor: pointer; text-align: center; text-decoration: none; }
+.access-submit:disabled { opacity: .55; cursor: wait; }
+.access-note { color: rgba(245,240,235,.33); font-size: .58rem; line-height: 1.5; }
+.access-success { display: grid; gap: .85rem; }
+.success-code { font-family: 'Barlow Condensed', sans-serif; color: var(--neon-pink, #ff2d78); letter-spacing: .28em; font-size: .95rem; text-transform: uppercase; }
+.access-success p { color: rgba(245,240,235,.66); }
+.queue-card { display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: .85rem 1rem; }
+.queue-card span { color: rgba(245,240,235,.38); font-size: .62rem; }
+.queue-card strong { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.35rem; }
+.priority-link { display: block; margin-top: .85rem; }
+.access-error { margin-top: 1rem; color: #ff8fb8; font-size: .9rem; }
+body.access-locked { overflow: hidden; }
+@media(max-width:600px){ .access-panel { padding: 1.5rem; } .access-title { font-size: 2.4rem; } }
+
 </style>
 
 
@@ -963,6 +1048,101 @@ Ubicación" target="_blank" rel="noopener noreferrer">Ubicación</a>
     player.classList.toggle('sp-collapsed');
     if (iframe && iframe.dataset.src && iframe.src === 'about:blank') iframe.src = iframe.dataset.src;
   }, { passive: true });
+})();
+</script>
+
+
+<script>
+(function() {
+  const openBtn = document.getElementById('open-access-protocol');
+  const modal = document.getElementById('access-modal');
+  const hold = document.getElementById('hold-unlock');
+  const form = document.getElementById('access-form');
+  const success = document.getElementById('access-success');
+  const error = document.getElementById('access-error');
+  const queuePosition = document.getElementById('queue-position');
+  const accessWave = document.getElementById('access-wave');
+  if (!openBtn || !modal || !hold || !form) return;
+
+  let holdTimer = null;
+  let holdStart = 0;
+  const HOLD_MS = 1400;
+
+  function openModal() {
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('access-locked');
+  }
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('access-locked');
+    resetHold();
+  }
+  function resetHold() {
+    if (hold.classList.contains('unlocked')) return;
+    cancelAnimationFrame(holdTimer);
+    holdTimer = null;
+    hold.style.setProperty('--hold-progress', '0%');
+  }
+  function unlock() {
+    hold.classList.add('unlocked');
+    hold.querySelector('.hold-label').textContent = 'ACCESS UNLOCKED';
+    hold.style.setProperty('--hold-progress', '100%');
+    form.hidden = false;
+    setTimeout(() => form.querySelector('input[name="email"]').focus(), 120);
+  }
+  function tick(now) {
+    const progress = Math.min((now - holdStart) / HOLD_MS, 1);
+    hold.style.setProperty('--hold-progress', (progress * 100).toFixed(1) + '%');
+    if (progress >= 1) { unlock(); return; }
+    holdTimer = requestAnimationFrame(tick);
+  }
+  function startHold() {
+    if (hold.classList.contains('unlocked')) return;
+    holdStart = performance.now();
+    cancelAnimationFrame(holdTimer);
+    holdTimer = requestAnimationFrame(tick);
+  }
+
+  openBtn.addEventListener('click', openModal);
+  modal.querySelectorAll('[data-close-access]').forEach(el => el.addEventListener('click', closeModal));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
+
+  hold.addEventListener('pointerdown', startHold);
+  hold.addEventListener('pointerup', resetHold);
+  hold.addEventListener('pointerleave', resetHold);
+  hold.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); startHold(); } });
+  hold.addEventListener('keyup', resetHold);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    error.hidden = true;
+    const submit = form.querySelector('button[type="submit"]');
+    submit.disabled = true;
+    submit.textContent = 'PROCESSING...';
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    try {
+      const response = await fetch('/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.message || 'No se pudo guardar la solicitud.');
+      form.hidden = true;
+      success.hidden = false;
+      queuePosition.textContent = String(payload.position || '—').padStart(3, '0');
+      accessWave.textContent = payload.wave || 'PENDING';
+    } catch (err) {
+      error.textContent = err.message || 'Error inesperado. Probá de nuevo.';
+      error.hidden = false;
+    } finally {
+      submit.disabled = false;
+      submit.textContent = 'REQUEST ACCESS';
+    }
+  });
 })();
 </script>
 
