@@ -59,16 +59,18 @@ def get_sheet():
 
 
 def ensure_sheet_headers(sheet) -> list[str]:
+    """Garantiza los encabezados sin romper hojas existentes."""
     values = sheet.get_all_values()
     if not values:
         sheet.append_row(HEADERS)
         return HEADERS
 
-    current_headers = values[0]
+    current_headers = [h.strip() for h in values[0]]
     missing = [header for header in HEADERS if header not in current_headers]
     if missing:
         current_headers = current_headers + missing
-        sheet.update("1:1", [current_headers])
+        end_col = chr(ord("A") + len(current_headers) - 1)
+        sheet.update(f"A1:{end_col}1", [current_headers])
     return current_headers
 
 
@@ -111,6 +113,13 @@ def calculate_state(wave: str) -> str:
     return "PENDING"
 
 
+def safe_int(value, default=0) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return int(default)
+
+
 def update_existing_access(sheet, row_number: int, headers: list[str], record: dict[str, str], access: dict[str, object], origin: str) -> None:
     """Completa campos nuevos en registros viejos sin duplicar el email."""
     updates = {
@@ -146,7 +155,7 @@ def append_waitlist_row(email: str, instagram: str = "", alias: str = "", origin
 
     for idx, record in enumerate(existing_records, start=1):
         if record.get("Email", "").strip().lower() == normalized_email:
-            priority = int(record.get("Prioridad") or calculate_priority(
+            priority = safe_int(record.get("Prioridad"), calculate_priority(
                 instagram=record.get("Instagram", instagram),
                 alias=record.get("Alias", alias),
                 origin=record.get("Origen", clean_origin),
@@ -263,7 +272,7 @@ def access_status(token: str):
     for idx, row in enumerate(values[1:], start=1):
         record = row_to_dict(headers, row)
         if record.get("Token", "").strip().upper() == token.strip().upper():
-            priority = int(record.get("Prioridad") or 100)
+            priority = safe_int(record.get("Prioridad"), 100)
             wave = record.get("Wave") or calculate_wave(idx, priority)
             return jsonify({
                 "status": "ok",

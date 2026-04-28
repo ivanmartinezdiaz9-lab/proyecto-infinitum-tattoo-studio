@@ -1,0 +1,16 @@
+ESTRUCTURA CORRECTA PARA RENDER
+
+Copiar así:
+- app.py en la raíz del proyecto
+- requirements.txt en la raíz
+- Procfile en la raíz
+- templates/index.html dentro de la carpeta templates
+
+NO borres tu carpeta static. Este ZIP no incluye imágenes/CSS/JS estáticos.
+Si borrás static, la web carga rota visualmente.
+
+Headers recomendados en Google Sheets:
+Fecha | Email | Instagram | Alias | Origen | Token | Estado | Wave | Prioridad | Expira | Drop ID
+
+Para probar origen:
+https://tudominio.com/?ref=instagram
