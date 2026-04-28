@@ -799,7 +799,7 @@ Ubicación" target="_blank" rel="noopener noreferrer">Toledo chico, Montevideo</
 .access-title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 7vw, 4rem); line-height: .95; margin-bottom: 1.2rem; }
 .access-title em { color: var(--neon-pink, #ff2d78); font-style: italic; text-shadow: 0 0 34px rgba(255,45,120,.24); }
 .access-copy { color: rgba(245,240,235,.58); line-height: 1.75; margin-bottom: 1.7rem; }
-.hold-unlock { position: relative; height: 54px; border: 1px solid rgba(255,45,120,.36); display: flex; align-items: center; justify-content: center; overflow: hidden; user-select: none; cursor: pointer; margin-bottom: 1.4rem; background: rgba(255,45,120,.035); }
+.hold-unlock { position: relative; height: 54px; border: 1px solid rgba(255,45,120,.36); display: flex; align-items: center; justify-content: center; overflow: hidden; user-select: none; -webkit-user-select: none; touch-action: none; -webkit-tap-highlight-color: transparent; cursor: pointer; margin-bottom: 1.4rem; background: rgba(255,45,120,.035); }
 .hold-fill { position: absolute; inset: 0 auto 0 0; width: var(--hold-progress, 0%); background: linear-gradient(90deg, rgba(255,45,120,.16), rgba(255,45,120,.48)); transition: width .08s linear; }
 .hold-label { position: relative; z-index: 1; font-family: 'Barlow Condensed', sans-serif; font-size: .78rem; font-weight: 600; letter-spacing: .24em; color: rgba(245,240,235,.78); }
 .hold-unlock.unlocked { border-color: rgba(255,45,120,.8); box-shadow: 0 0 24px rgba(255,45,120,.14); }
@@ -808,6 +808,7 @@ Ubicación" target="_blank" rel="noopener noreferrer">Toledo chico, Montevideo</
 .access-form span { color: rgba(255,45,120,.72); font-size: .62rem; }
 .access-form input { width: 100%; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.11); color: #fff; padding: .95rem 1rem; font-family: 'Barlow', sans-serif; outline: none; }
 .access-form input:focus { border-color: rgba(255,45,120,.72); box-shadow: 0 0 0 3px rgba(255,45,120,.08); }
+.access-form input:disabled { opacity: .45; cursor: not-allowed; }
 .access-submit, .priority-link { margin-top: .4rem; border: 0; background: var(--neon-pink, #ff2d78); color: #080606; padding: 1rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; cursor: pointer; text-align: center; text-decoration: none; }
 .access-submit:disabled { opacity: .55; cursor: wait; }
 .access-note { color: rgba(245,240,235,.33); font-size: .58rem; line-height: 1.5; }
@@ -820,7 +821,60 @@ Ubicación" target="_blank" rel="noopener noreferrer">Toledo chico, Montevideo</
 .priority-link { display: block; margin-top: .85rem; }
 .access-error { margin-top: 1rem; color: #ff8fb8; font-size: .9rem; }
 body.access-locked { overflow: hidden; }
-@media(max-width:600px){ .access-panel { padding: 1.5rem; } .access-title { font-size: 2.4rem; } }
+@media(max-width:600px){
+  .coming-section {
+    min-height: 100svh;
+    width: 100%;
+    padding: 6rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .coming-inner {
+    width: min(100%, 360px);
+    max-width: 360px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .coming-lock { margin-left: auto; margin-right: auto; }
+  .coming-eyebrow { width: 100%; letter-spacing: .24em; text-align: center; }
+  .coming-title {
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: clamp(3.05rem, 18vw, 4.65rem);
+    line-height: .9;
+    text-align: center;
+    overflow-wrap: normal;
+  }
+  .coming-text { width: 100%; max-width: 310px; margin-left: auto; margin-right: auto; text-align: center; }
+  .coming-tags { width: 100%; gap: .65rem; justify-content: center; align-items: center; }
+  .coming-tags span { font-size: .62rem; letter-spacing: .08em; padding: .32rem .55rem; }
+  .coming-progress-wrap { width: 100%; max-width: 320px; margin-left: auto; margin-right: auto; }
+  .coming-cta { width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .btn-coming { display: inline-flex; align-items: center; justify-content: center; max-width: 100%; text-align: center; }
+  .corner { width: 22px; height: 22px; }
+  .corner-tl { top: 1rem; left: 1rem; }
+  .corner-tr { top: 1rem; right: 1rem; }
+  .corner-bl { bottom: 1rem; left: 1rem; }
+  .corner-br { bottom: 1rem; right: 1rem; }
+
+  .access-modal { padding: .9rem; align-items: center; }
+  .access-panel { width: min(100%, 420px); max-height: 90svh; padding: 1.35rem; }
+  .access-title { font-size: 2.25rem; }
+  .access-copy { font-size: .92rem; }
+  .hold-unlock { height: 58px; width: 100%; }
+  .hold-label { font-size: .72rem; letter-spacing: .18em; text-align: center; padding: 0 .75rem; }
+  .access-submit, .priority-link { letter-spacing: .18em; }
+}
 
 </style>
 
@@ -1066,9 +1120,26 @@ Ubicación" target="_blank" rel="noopener noreferrer">Ubicación</a>
 
   let holdTimer = null;
   let holdStart = 0;
+  let isHolding = false;
+  let isUnlocked = false;
   const HOLD_MS = 1400;
+  const inputs = [...form.querySelectorAll('input, button[type="submit"]')];
+  const holdLabel = hold.querySelector('.hold-label');
+
+  function setFormLocked(locked) {
+    isUnlocked = !locked;
+    form.hidden = locked;
+    inputs.forEach(el => { el.disabled = locked; });
+    hold.classList.toggle('unlocked', !locked);
+    hold.style.setProperty('--hold-progress', locked ? '0%' : '100%');
+    if (holdLabel) holdLabel.textContent = locked ? 'MANTENER PARA DESBLOQUEAR' : 'ACCESS UNLOCKED';
+  }
 
   function openModal() {
+    success.hidden = true;
+    error.hidden = true;
+    form.reset();
+    setFormLocked(true);
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('access-locked');
@@ -1077,30 +1148,35 @@ Ubicación" target="_blank" rel="noopener noreferrer">Ubicación</a>
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('access-locked');
-    resetHold();
+    stopHold(true);
+    setFormLocked(true);
   }
-  function resetHold() {
-    if (hold.classList.contains('unlocked')) return;
+  function stopHold(resetProgress = false) {
+    isHolding = false;
     cancelAnimationFrame(holdTimer);
     holdTimer = null;
-    hold.style.setProperty('--hold-progress', '0%');
+    if (resetProgress && !isUnlocked) hold.style.setProperty('--hold-progress', '0%');
   }
   function unlock() {
-    hold.classList.add('unlocked');
-    hold.querySelector('.hold-label').textContent = 'ACCESS UNLOCKED';
-    hold.style.setProperty('--hold-progress', '100%');
-    form.hidden = false;
-    setTimeout(() => form.querySelector('input[name="email"]').focus(), 120);
+    stopHold(false);
+    setFormLocked(false);
+    setTimeout(() => form.querySelector('input[name="email"]')?.focus({ preventScroll: true }), 120);
   }
   function tick(now) {
+    if (!isHolding || isUnlocked) return;
     const progress = Math.min((now - holdStart) / HOLD_MS, 1);
     hold.style.setProperty('--hold-progress', (progress * 100).toFixed(1) + '%');
     if (progress >= 1) { unlock(); return; }
     holdTimer = requestAnimationFrame(tick);
   }
-  function startHold() {
-    if (hold.classList.contains('unlocked')) return;
+  function startHold(e) {
+    if (isUnlocked) return;
+    e?.preventDefault();
+    isHolding = true;
     holdStart = performance.now();
+    if (e?.pointerId && hold.setPointerCapture) {
+      try { hold.setPointerCapture(e.pointerId); } catch (_) {}
+    }
     cancelAnimationFrame(holdTimer);
     holdTimer = requestAnimationFrame(tick);
   }
@@ -1109,14 +1185,27 @@ Ubicación" target="_blank" rel="noopener noreferrer">Ubicación</a>
   modal.querySelectorAll('[data-close-access]').forEach(el => el.addEventListener('click', closeModal));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
 
-  hold.addEventListener('pointerdown', startHold);
-  hold.addEventListener('pointerup', resetHold);
-  hold.addEventListener('pointerleave', resetHold);
-  hold.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); startHold(); } });
-  hold.addEventListener('keyup', resetHold);
+  setFormLocked(true);
+
+  hold.addEventListener('pointerdown', startHold, { passive: false });
+  hold.addEventListener('pointerup', () => stopHold(true));
+  hold.addEventListener('pointercancel', () => stopHold(true));
+  hold.addEventListener('pointerleave', () => stopHold(true));
+  hold.addEventListener('touchstart', startHold, { passive: false });
+  hold.addEventListener('touchend', () => stopHold(true));
+  hold.addEventListener('touchcancel', () => stopHold(true));
+  hold.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') startHold(e);
+  });
+  hold.addEventListener('keyup', () => stopHold(true));
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!isUnlocked) {
+      error.textContent = 'Mantené presionado para desbloquear el formulario.';
+      error.hidden = false;
+      return;
+    }
     error.hidden = true;
     const submit = form.querySelector('button[type="submit"]');
     submit.disabled = true;
