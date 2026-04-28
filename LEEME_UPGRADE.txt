@@ -1,0 +1,23 @@
+UPGRADE INFINITUM WAITLIST
+
+Reemplazá estos archivos en tu proyecto:
+- app.py -> raíz del proyecto
+- requirements.txt -> raíz del proyecto
+- Procfile -> raíz del proyecto
+- templates/index.html -> dentro de la carpeta templates
+
+IMPORTANTE:
+- No borres tu carpeta static. Este ZIP no incluye imágenes, CSS ni JS estáticos.
+- En Render necesitás tener configurada la variable GOOGLE_CREDENTIALS_JSON.
+- Opcional: configurá DROP_ID si querés cambiar el nombre interno del drop.
+
+Google Sheets:
+La primera fila queda así:
+Fecha | Email | Instagram | Alias | Origen | Token | Estado | Wave | Prioridad | Expira | Drop ID
+
+Origen guarda el ref real:
+- tusitio.com/?ref=instagram -> Origen = instagram
+- tusitio.com/?ref=tiktok -> Origen = tiktok
+- sin ref -> Origen = direct
+
+El backend evita emails duplicados. Si un email ya existe, completa los campos nuevos que falten sin crear otra fila.

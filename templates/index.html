@@ -555,6 +555,14 @@ Ubicación" target="_blank" rel="noopener noreferrer">Toledo chico, Montevideo</
         <span>ACCESS WAVE</span>
         <strong id="access-wave">PENDING</strong>
       </div>
+      <div class="queue-card">
+        <span>REQUEST STATUS</span>
+        <strong id="access-state">PENDING</strong>
+      </div>
+      <div class="queue-card">
+        <span>ACCESS TOKEN</span>
+        <strong id="access-token">—</strong>
+      </div>
       <a class="priority-link" href="https://wa.me/59896588562?text=Hola%20Infinitum%2C%20me%20anot%C3%A9%20en%20la%20waitlist%20del%20DROP_001%20y%20quiero%20acceso%20prioritario" target="_blank" rel="noopener noreferrer">Unlock priority por WhatsApp</a>
     </div>
 
@@ -1116,6 +1124,8 @@ Ubicación" target="_blank" rel="noopener noreferrer">Ubicación</a>
   const error = document.getElementById('access-error');
   const queuePosition = document.getElementById('queue-position');
   const accessWave = document.getElementById('access-wave');
+  const accessState = document.getElementById('access-state');
+  const accessToken = document.getElementById('access-token');
   if (!openBtn || !modal || !hold || !form) return;
 
   let holdTimer = null;
@@ -1212,6 +1222,7 @@ Ubicación" target="_blank" rel="noopener noreferrer">Ubicación</a>
     submit.textContent = 'PROCESSING...';
 
     const data = Object.fromEntries(new FormData(form).entries());
+    data.ref = new URLSearchParams(window.location.search).get('ref') || document.referrer || 'direct';
     try {
       const response = await fetch('/waitlist', {
         method: 'POST',
@@ -1224,6 +1235,8 @@ Ubicación" target="_blank" rel="noopener noreferrer">Ubicación</a>
       success.hidden = false;
       queuePosition.textContent = String(payload.position || '—').padStart(3, '0');
       accessWave.textContent = payload.wave || 'PENDING';
+      if (accessState) accessState.textContent = payload.state || 'PENDING';
+      if (accessToken) accessToken.textContent = payload.token || '—';
     } catch (err) {
       error.textContent = err.message || 'Error inesperado. Probá de nuevo.';
       error.hidden = false;

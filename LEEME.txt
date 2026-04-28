@@ -1,7 +1,0 @@
-Reemplazo recomendado:
-- app.py -> raíz del proyecto
-- requirements.txt -> raíz del proyecto
-- Procfile -> raíz del proyecto
-- templates/index.html -> dentro de la carpeta templates
-
-La waitlist se guarda automáticamente en waitlist.csv cuando alguien completa el formulario de Infinitum Merch.
