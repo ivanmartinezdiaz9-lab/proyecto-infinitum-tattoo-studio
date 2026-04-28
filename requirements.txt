@@ -2,3 +2,5 @@ Flask==3.0.3
 Flask-Compress==1.15
 gunicorn==22.0.0
 Brotli==1.1.0
+gspread==6.1.4
+google-auth==2.35.0
